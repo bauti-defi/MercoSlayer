@@ -1,13 +1,11 @@
 package scripts.com.mercosur.slayer.nodes;
 
 import org.tribot.api.General;
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Condition;
-import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.abc.ABCUtil;
-import org.tribot.api2007.Combat;
-import org.tribot.api2007.NPCs;
-import org.tribot.api2007.PathFinding;
-import org.tribot.api2007.Player;
+import org.tribot.api2007.*;
+import org.tribot.api2007.types.RSCharacter;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSTile;
 import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
@@ -37,13 +35,23 @@ public class FightingNode extends Node {
 
 	@Override
 	public boolean condition() {
+		if (!Combat.isAutoRetaliateOn()) {
+			General.println("Enabling auto retaliate.");
+			Combat.setAutoRetaliate(true);
+			Sleep.conditionalSleep(new Condition() {
+				@Override
+				public boolean active() {
+					return Combat.isAutoRetaliateOn();
+				}
+			}, 2000, 3000);
+		}
 		if (currentTask != null) {
 			if (!inCombat()) {
 				if (currentTarget == null || !currentTarget.isValid() || !canTarget(currentTarget)) {
 					if ((currentTarget = getNextTarget()) != null) {
 						General.println("Next " + currentMonster.getName() + " found");
 					} else {
-						General.println("Walking to task:  " + currentTask.getMonster().getName());
+						General.println("Walking to task: " + currentTask.getMonster().getName());
 						DaxWalker.walkTo(currentMonster.getArea().getRandomTile(), () -> {
 							if (atTask()) {
 								return WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS;
@@ -101,22 +109,29 @@ public class FightingNode extends Node {
 				|| Combat.getAttackingEntities().length > 0;
 	}
 
-	//TODO: Add support for multi
 	private boolean canTarget(RSNPC npc) {
-		return npc != null && npc.isClickable() && npc.isValid()
-				&& npc.getName().equalsIgnoreCase(currentMonster.getName())
-				&& !npc.isInCombat()
-				&& npc.getInteractingCharacter() == null
-				&& PathFinding.canReach(npc.getPosition(), false);
+		if (npc != null && npc.isClickable() && npc.isValid() && npc.getName().equalsIgnoreCase(currentMonster.getName()) && PathFinding.canReach(npc.getPosition(), false)) {
+			return !npc.isInCombat() && npc.getInteractingCharacter() == null || npc.getInteractingCharacter() != null && npc.getInteractingCharacter().equals(Player.getRSPlayer());
+		}
+		return false;
+	}
+
+	private boolean isMultiCombatZone() {
+		return Interfaces.isInterfaceSubstantiated(548, 20);
 	}
 
 	private RSNPC getNextTarget() {
-		return (RSNPC) antiban.selectNextTarget(NPCs.findNearest(new Filter<RSNPC>() {
-			@Override
-			public boolean accept(final RSNPC rsnpc) {
-				return canTarget(rsnpc);
-			}
-		}));
+		final RSNPC[] possibleTargets = NPCs.findNearest(currentMonster.getName());
+		return Stream.of(possibleTargets)
+				.filter(npc -> {
+					final RSCharacter interactingCharacter = npc.getInteractingCharacter();
+					if (interactingCharacter != null) {
+						return interactingCharacter.equals(Player.getRSPlayer());
+					}
+					return false;
+				})
+				.findFirst()
+				.orElse((RSNPC) antiban.selectNextTarget(Stream.of(possibleTargets).filter(npc -> canTarget(npc)).toArray(Positionable[]::new)));
 	}
 
 }
