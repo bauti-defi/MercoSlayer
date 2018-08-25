@@ -19,7 +19,20 @@ public class NodeScript extends Script {
 
 	@Override
 	public void run() {
-		General.sleep(nodes.stream().filter(node -> node.condition()).findFirst().map(node -> node.execute()).orElse(50));
+		while (!nodes.isEmpty()) {
+			for (Node node : nodes) {
+				if (node.condition()) {
+					switch (node.execute()) {
+						case LOOP:
+							General.sleep(80, 150);
+							break;
+						case CONTINUE:
+							General.sleep(80, 150);
+							continue;
+					}
+				}
+			}
+		}
 	}
 
 	private void sortNodes() {

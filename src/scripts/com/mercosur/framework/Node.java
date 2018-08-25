@@ -4,6 +4,10 @@ public abstract class Node {
 
 	private final NodePriority priority;
 
+	public enum Response {
+		LOOP, CONTINUE
+	}
+
 	public Node(final NodePriority priority) {
 		this.priority = priority;
 	}
@@ -14,6 +18,6 @@ public abstract class Node {
 
 	public abstract boolean condition();
 
-	public abstract int execute();
+	public abstract Response execute();
 
 }

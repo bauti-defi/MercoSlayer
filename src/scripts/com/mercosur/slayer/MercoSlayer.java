@@ -22,7 +22,7 @@ public class MercoSlayer extends NodeScript {
 		WebWalkerServerApi.getInstance().setDaxCredentialsProvider(new DaxCredentialsProvider() {
 			@Override
 			public DaxCredentials getDaxCredentials() {
-				return new DaxCredentials("sub_DPjcfqN4YkIxm8", "sub_DPjXXzL5DeSiPf");
+				return new DaxCredentials("sub_DPjXXzL5DeSiPf", "PUBLIC-KEY");
 			}
 		});
 		println("DaxWalker authenticated.");

@@ -12,7 +12,7 @@ public class RunTimeVariables {
 
 	public static final ABCUtil ANTIBAN = new ABCUtil();
 
-	public static Monster monster = new Monster("Black Demon", 178, null, new RSArea(new RSTile[] {new RSTile(1725, 10093, 0), new RSTile(1716, 10092, 0), new RSTile(1717, 10080, 0), new RSTile(1720, 10077, 0), new RSTile(1722, 10078, 0), new RSTile(1723, 10080, 0)}), null, new Monster.AttackStyle[] {Monster.AttackStyle.MELEE});
+	public static Monster monster = new Monster("Chicken", 178, null, new RSArea(new RSTile[] {new RSTile(3236, 3293, 0), new RSTile(3236, 3301, 0), new RSTile(3225, 3301, 0), new RSTile(3225, 3294, 0)}), null, new Monster.AttackStyle[] {Monster.AttackStyle.MELEE});
 
 	public static Task currentTask = new Task(monster, 100);
 

@@ -26,12 +26,12 @@ public class AntibanNode extends Node {
 	}
 
 	@Override
-	public int execute() {
+	public Node.Response execute() {
 		if (!Game.isRunOn() && Game.getRunEnergy() >= runActivationFlag) {
 			Options.setRunEnabled(true);
 			runActivationFlag = 0;
 		}
 		antiban.generateTrackers();
-		return 150;
+		return Response.CONTINUE;
 	}
 }

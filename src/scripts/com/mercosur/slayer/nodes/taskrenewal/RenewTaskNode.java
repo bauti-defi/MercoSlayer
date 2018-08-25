@@ -33,7 +33,7 @@ public class RenewTaskNode extends Node {
 	}
 
 	@Override
-	public int execute() {
+	public Node.Response execute() {
 		final RSNPC master = NPCs.find(currentSlayerMaster.getName())[0];
 		if (master != null) {
 			if (!closeToSlayerMaster(master)) {
@@ -58,7 +58,7 @@ public class RenewTaskNode extends Node {
 				//traverse dialogue with master
 			}
 		}
-		return 150;
+		return Response.CONTINUE;
 	}
 
 	private boolean isInDialogue() {

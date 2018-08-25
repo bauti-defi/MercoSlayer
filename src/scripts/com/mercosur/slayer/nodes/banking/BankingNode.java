@@ -29,14 +29,14 @@ public class BankingNode extends Node {
 	}
 
 	@Override
-	public int execute() {
+	public Node.Response execute() {
 		if (Banking.isInBank()) {
 			if (Banking.isBankScreenOpen() || Banking.openBankBanker()) { //Bank is open
 				if (shouldDepositAll()) {
 					if (Banking.depositAll() > 0 && requests.removeIf(request -> request instanceof DepositRequest)) {
 						throw new BankingException("Failed to deposit all.");
 					}
-					return 300;
+					return Response.CONTINUE;
 				}
 				BankRequest request;
 				while ((request = requests.pop()) != null) { //execute banking requests
@@ -59,7 +59,7 @@ public class BankingNode extends Node {
 		} else {
 			DaxWalker.walkToBank();
 		}
-		return 100;
+		return Response.CONTINUE;
 	}
 
 	private boolean shouldDepositAll() {

@@ -34,7 +34,7 @@ public class EatingNode extends Node {
 	}
 
 	@Override
-	public int execute() {
+	public Node.Response execute() {
 		final RSItem food = Stream.of(Inventory.find(this.food.getName())).findAny().orElseThrow(() -> new NullPointerException("No food found"));
 		if (food != null) {
 			if (Sleep.conditionalSleep(new Condition() {
@@ -46,7 +46,7 @@ public class EatingNode extends Node {
 				generateNewEatAtHP();
 			}
 		}
-		return 150;
+		return Response.CONTINUE;
 	}
 
 	private void generateNewEatAtHP() {
