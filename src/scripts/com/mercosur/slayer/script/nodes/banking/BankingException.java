@@ -1,7 +1,7 @@
-package scripts.com.mercosur.slayer.nodes.banking;
+package scripts.com.mercosur.slayer.script.nodes.banking;
 
-import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
-import scripts.com.mercosur.slayer.nodes.banking.request.DepositRequest;
+import scripts.com.mercosur.slayer.script.nodes.banking.request.BankRequest;
+import scripts.com.mercosur.slayer.script.nodes.banking.request.DepositRequest;
 
 public class BankingException extends RuntimeException {
 

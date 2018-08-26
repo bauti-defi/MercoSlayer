@@ -2,7 +2,12 @@ package scripts.com.mercosur.framework;
 
 import org.tribot.api.General;
 import org.tribot.script.Script;
+import org.tribot.util.Util;
+import scripts.com.mercosur.slayer.gui.GUI;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,15 +15,31 @@ public class NodeScript extends Script {
 
 	private final List<Node> nodes = new ArrayList<>();
 
+	private GUI gui;
+
+	private URL fxml;
+
 	public NodeScript(Node... nodes) {
 		for (Node node : nodes) {
 			this.nodes.add(node);
 		}
 		sortNodes();
+		println("Nodes configured.");
 	}
 
 	@Override
 	public void run() {
+		try {
+			fxml = new File(Util.getWorkingDirectory() + File.separator + "bin" + File.separator + "scripts" + File.separator + "com" + File.separator + "mercosur" + File.separator + "slayer" + File.separator + "gui" + File.separator + "main.fxml").toURI().toURL();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		gui = new GUI(fxml);
+		gui.show();
+		do {
+			sleep(500);
+		} while (gui.isOpen());
+
 		while (!nodes.isEmpty()) {
 			for (Node node : nodes) {
 				if (node.condition()) {

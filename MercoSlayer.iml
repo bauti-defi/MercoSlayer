@@ -10,5 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="TRiBot" level="project" />
+    <orderEntry type="library" name="allatori-annotations" level="project" />
   </component>
 </module>

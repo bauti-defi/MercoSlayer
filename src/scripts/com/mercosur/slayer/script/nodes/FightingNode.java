@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.nodes;
+package scripts.com.mercosur.slayer.script.nodes;
 
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
@@ -82,8 +82,9 @@ public class FightingNode extends Node {
 					return inCombat() || !canTarget(currentTarget);
 				}
 			}, 3500, 5000);
+			return Response.CONTINUE;
 		}
-		return Response.CONTINUE;
+		return Response.LOOP;
 	}
 
 	private boolean atTask() {

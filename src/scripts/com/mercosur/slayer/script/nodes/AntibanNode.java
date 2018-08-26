@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.nodes;
+package scripts.com.mercosur.slayer.script.nodes;
 
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;

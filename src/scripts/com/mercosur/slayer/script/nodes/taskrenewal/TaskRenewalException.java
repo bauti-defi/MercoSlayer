@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.nodes.taskrenewal;
+package scripts.com.mercosur.slayer.script.nodes.taskrenewal;
 
 public class TaskRenewalException extends RuntimeException {
 
