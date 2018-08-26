@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.script.nodes.banking.request;
+package scripts.com.mercosur.slayer.nodes.banking.request;
 
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
 

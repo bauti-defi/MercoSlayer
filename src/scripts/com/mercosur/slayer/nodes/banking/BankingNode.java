@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.script.nodes.banking;
+package scripts.com.mercosur.slayer.nodes.banking;
 
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
@@ -7,10 +7,10 @@ import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
-import scripts.com.mercosur.slayer.script.nodes.banking.request.BankRequest;
-import scripts.com.mercosur.slayer.script.nodes.banking.request.DepositRequest;
-import scripts.com.mercosur.slayer.script.nodes.banking.request.Urgency;
-import scripts.com.mercosur.slayer.script.nodes.banking.request.WithdrawRequest;
+import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
+import scripts.com.mercosur.slayer.nodes.banking.request.DepositRequest;
+import scripts.com.mercosur.slayer.nodes.banking.request.Urgency;
+import scripts.com.mercosur.slayer.nodes.banking.request.WithdrawRequest;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 import java.util.Stack;

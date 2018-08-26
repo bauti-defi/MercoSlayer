@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.script.nodes.taskrenewal;
+package scripts.com.mercosur.slayer.nodes.taskrenewal;
 
 import org.tribot.api.General;
 import org.tribot.api.types.generic.Condition;
@@ -9,14 +9,14 @@ import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSNPC;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
-import scripts.com.mercosur.slayer.models.Task;
+import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.npcs.SlayerMaster;
 import scripts.com.mercosur.slayer.util.RunTimeVariables;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 public class RenewTaskNode extends Node {
 
-	private Task currentTask = RunTimeVariables.currentTask;
+	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 
 	private SlayerMaster currentSlayerMaster = RunTimeVariables.currentSlayerMaster;
 
@@ -27,7 +27,7 @@ public class RenewTaskNode extends Node {
 	@Override
 	public boolean condition() {
 		if (currentSlayerMaster != null) {
-			return currentTask == null;
+			return currentSlayerAssignment == null;
 		}
 		return false;
 	}

@@ -9,7 +9,7 @@ import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentials;
 import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentialsProvider;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.NodeScript;
-import scripts.com.mercosur.slayer.script.nodes.FightingNode;
+import scripts.com.mercosur.slayer.nodes.FightingNode;
 import scripts.com.mercosur.slayer.util.RunTimeVariables;
 
 @ScriptManifest(name = "MercoSlayer", authors = {"Mercosur"}, description = "Trains slayer in OSRS.", category = "Slayer", gameMode = 1)

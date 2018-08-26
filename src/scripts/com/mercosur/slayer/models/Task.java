@@ -2,30 +2,33 @@ package scripts.com.mercosur.slayer.models;
 
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Task {
 
-	private final Monster monster;
+	private final String name;
 
-	private final int assignedAmount;
+	private List<Monster> monsters = new ArrayList<>();
 
-	private int currentCount;
-
-	public Task(final Monster monster, final int assignedAmount) {
-		this.monster = monster;
-		this.assignedAmount = assignedAmount;
-		this.currentCount = this.assignedAmount;
+	public Task(final String name) {
+		this.name = name;
 	}
 
-	public Monster getMonster() {
-		return monster;
+	public String getName() {
+		return name;
 	}
 
-	public int getAssignedAmount() {
-		return assignedAmount;
+	public void addMonster(Monster monster) {
+		this.monsters.add(monster);
 	}
 
-	public int getCurrentCount() {
-		return currentCount;
+	public List<Monster> getMonsters() {
+		return monsters;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
 }

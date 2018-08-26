@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import scripts.com.mercosur.slayer.models.Task;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,16 +19,20 @@ public class MainController extends AbstractGUIController {
 
 	@FXML
 	@DoNotRename
-	private TreeView<String> taskTree;
+	private TreeView<Task> taskTree;
 
 	@FXML
 	@DoNotRename
 	public void addTask() {
-		taskTree.setRoot(new TreeItem<>(taskToAddName.getText()));
+		final TreeItem<Task> newTask = new TreeItem<>(new Task(taskToAddName.getText()));
+		taskTree.getRoot().getChildren().add(newTask);
+		if (!taskTree.getRoot().isExpanded()) {
+			taskTree.getRoot().setExpanded(true);
+		}
 	}
 
 	@Override
 	public void initialize(final URL location, final ResourceBundle resources) {
-
+		taskTree.setRoot(new TreeItem<>(new Task("Tasks")));
 	}
 }

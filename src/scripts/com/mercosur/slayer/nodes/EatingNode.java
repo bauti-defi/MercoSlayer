@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.script.nodes;
+package scripts.com.mercosur.slayer.nodes;
 
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Combat;
@@ -7,7 +7,7 @@ import org.tribot.api2007.types.RSItem;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
-import scripts.com.mercosur.slayer.script.nodes.banking.BankingNode;
+import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
 import scripts.com.mercosur.slayer.util.RunTimeVariables;
 import scripts.com.mercosur.slayer.util.Sleep;
 

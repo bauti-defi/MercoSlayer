@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.script.nodes;
+package scripts.com.mercosur.slayer.nodes;
 
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
@@ -12,7 +12,7 @@ import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
-import scripts.com.mercosur.slayer.models.Task;
+import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
 import scripts.com.mercosur.slayer.util.RunTimeVariables;
 import scripts.com.mercosur.slayer.util.Sleep;
@@ -23,9 +23,9 @@ public class FightingNode extends Node {
 
 	private final ABCUtil antiban = RunTimeVariables.ANTIBAN;
 
-	private Task currentTask = RunTimeVariables.currentTask;
+	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 
-	private Monster currentMonster = currentTask.getMonster();
+	private Monster currentMonster = currentSlayerAssignment.getMonster();
 
 	private RSNPC currentTarget;
 
@@ -45,13 +45,13 @@ public class FightingNode extends Node {
 				}
 			}, 2000, 3000);
 		}
-		if (currentTask != null) {
+		if (currentSlayerAssignment != null) {
 			if (!inCombat()) {
 				if (currentTarget == null || !currentTarget.isValid() || !canTarget(currentTarget)) {
 					if ((currentTarget = getNextTarget()) != null) {
 						General.println("Next " + currentMonster.getName() + " found");
 					} else {
-						General.println("Walking to task: " + currentTask.getMonster().getName());
+						General.println("Walking to task: " + currentSlayerAssignment.getMonster().getName());
 						DaxWalker.walkTo(currentMonster.getArea().getRandomTile(), () -> {
 							if (atTask()) {
 								return WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS;
