@@ -73,7 +73,7 @@ public class ItemManager extends Node {
 		final List<ItemProperty> requiredItemProperties = getAllRequiredItemProperties();
 		return ITEMS.stream().filter(abstractItem -> abstractItem instanceof Item)
 				.map(abstractItem -> (Item) abstractItem)
-				.filter(item -> requiredItemProperties.contains(item.getProperties()))
+				.filter(item -> requiredItemProperties.stream().anyMatch(property -> item.hasProperty(property)))
 				.collect(Collectors.toList());
 	}
 
@@ -83,4 +83,5 @@ public class ItemManager extends Node {
 		}
 		return false;
 	}
+
 }

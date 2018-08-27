@@ -2,12 +2,7 @@ package scripts.com.mercosur.slayer.models.npcs.monster;
 
 public enum FinalBlowMonsterMechanic {
 
-	/*monster mechanic
-	final blow item ->  an action
-	required armor/wep -> boolean
-	 */
-
-	THROW_SALT(null), BREAK_WITH_HAMMER(null);
+	THROW_SALT(null), BREAK_WITH_HAMMER(null), THROW_ICE(null);
 
 	private final MonsterMechanic monsterMechanic;
 
