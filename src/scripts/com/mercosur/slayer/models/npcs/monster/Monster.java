@@ -50,4 +50,9 @@ public class Monster {
 	public AttackStyle[] getAttackStyles() {
 		return attackStyles;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + level + "]" + name;
+	}
 }

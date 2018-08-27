@@ -19,10 +19,6 @@ public class Task {
 		return name;
 	}
 
-	public void addMonster(Monster monster) {
-		this.monsters.add(monster);
-	}
-
 	public List<Monster> getMonsters() {
 		return monsters;
 	}
