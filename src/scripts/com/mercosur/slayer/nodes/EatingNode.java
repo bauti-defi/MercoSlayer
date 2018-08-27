@@ -20,7 +20,7 @@ public class EatingNode extends Node {
 	private int eatAtHP = RunTimeVariables.ANTIBAN.generateEatAtHP();
 
 	public EatingNode() {
-		super(NodePriority.CRITICAL);
+		super(NodePriority.VERY_HIGH);
 	}
 
 	@Override

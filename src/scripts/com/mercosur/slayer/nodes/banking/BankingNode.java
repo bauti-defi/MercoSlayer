@@ -112,6 +112,14 @@ public class BankingNode extends Node {
 	private static void sortRequest() {
 		requests.sort((request1, request2) -> {
 			if (request1 instanceof DepositRequest) {
+				if (request2 instanceof DepositRequest) {
+					if (request1.getUrgency().getTier() > request2.getUrgency().getTier()) {
+						return 1;
+					} else if (request1.getUrgency().getTier() < request2.getUrgency().getTier()) {
+						return -1;
+					}
+					return 0;
+				}
 				return 1;
 			} else if (request2 instanceof DepositRequest) {
 				return -1;
