@@ -18,4 +18,9 @@ public abstract class AbstractItem {
 	public boolean isStackable() {
 		return stackable;
 	}
+
+	@Override
+	public String toString() {
+		return name + ":" + (stackable ? "Stackable" : "Non-Stackable");
+	}
 }

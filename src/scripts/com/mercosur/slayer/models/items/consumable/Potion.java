@@ -8,7 +8,7 @@ public class Potion extends AbstractItem {
 	private final Type type;
 	private final Skills.SKILLS[] skills;
 
-	enum Type {
+	public enum Type {
 		BUFF, RESTORATION
 	}
 
@@ -24,5 +24,15 @@ public class Potion extends AbstractItem {
 
 	public Type getType() {
 		return type;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder(getName());
+		stringBuilder.append(":" + type);
+		for (Skills.SKILLS skill : skills) {
+			stringBuilder.append(":" + skill);
+		}
+		return stringBuilder.toString();
 	}
 }

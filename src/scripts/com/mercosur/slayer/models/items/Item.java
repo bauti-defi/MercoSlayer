@@ -26,4 +26,13 @@ public class Item extends AbstractItem {
 		return properties;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder(super.toString());
+		stringBuilder.append(isCanEquip() ? ":Equipable" : ":Not-Equipable");
+		for (ItemProperty property : properties) {
+			stringBuilder.append(":" + property);
+		}
+		return stringBuilder.toString();
+	}
 }
