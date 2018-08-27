@@ -2,6 +2,8 @@ package scripts.com.mercosur.slayer;
 
 import org.tribot.api.General;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.Inventory;
+import org.tribot.api2007.types.RSItem;
 import org.tribot.script.ScriptManifest;
 import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.dax_api.api_lib.WebWalkerServerApi;
@@ -17,6 +19,10 @@ public class MercoSlayer extends NodeScript {
 
 	public MercoSlayer() {
 		super(new FightingNode());
+
+		for (RSItem item : Inventory.getAll()) {
+			println(item.getIndex());
+		}
 
 		WebWalkerServerApi.getInstance().setDaxCredentialsProvider(new DaxCredentialsProvider() {
 			@Override
