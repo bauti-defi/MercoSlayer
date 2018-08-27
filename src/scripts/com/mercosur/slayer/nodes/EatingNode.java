@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class EatingNode extends Node {
 
-	private final Food food = RunTimeVariables.food;
+	private final Food food = RunTimeVariables.FOOD;
 
 	private int eatAtHP = RunTimeVariables.ANTIBAN.generateEatAtHP();
 
@@ -35,7 +35,7 @@ public class EatingNode extends Node {
 
 	@Override
 	public Node.Response execute() {
-		final RSItem food = Stream.of(Inventory.find(this.food.getName())).findAny().orElseThrow(() -> new NullPointerException("No food found"));
+		final RSItem food = Stream.of(Inventory.find(this.food.getName())).findAny().orElseThrow(() -> new NullPointerException("No FOOD found"));
 		if (food != null) {
 			if (Sleep.conditionalSleep(new Condition() {
 				@Override

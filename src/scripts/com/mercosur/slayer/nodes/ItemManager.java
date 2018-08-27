@@ -22,7 +22,7 @@ public class ItemManager extends Node {
 	//All mapped items
 	public static final List<AbstractItem> ITEMS = new ArrayList<>();
 
-	private final Food food = RunTimeVariables.food;
+	private final Food food = RunTimeVariables.FOOD;
 
 	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 
@@ -33,13 +33,15 @@ public class ItemManager extends Node {
 	@Override
 	public boolean condition() {
 		if (isLoggedIn()) {
-			return !hasFood() || !hasRequiredSlayerAssignmentItems();
+			return !hasFood() || !hasPotions() || !hasRequiredSlayerAssignmentItems();
 		}
 		return false;
 	}
 
 	@Override
 	public Response execute() {
+		//calculate inventory and equipmet
+		//send bank requests to banking node accordingly
 		return Response.CONTINUE;
 	}
 
@@ -57,6 +59,10 @@ public class ItemManager extends Node {
 
 	private boolean hasFood() {
 		return hasItemInInventory(food);
+	}
+
+	private boolean hasPotions() {
+		return false;
 	}
 
 	private List<ItemProperty> getAllRequiredItemProperties() {

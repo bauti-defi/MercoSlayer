@@ -6,9 +6,16 @@ public class Item extends AbstractItem {
 
 	private ItemProperty[] properties;
 
-	public Item(final String name, final boolean stackable, final ItemProperty... properties) {
+	private boolean canEquip;
+
+	public Item(final String name, final boolean stackable, final boolean canEquip, final ItemProperty... properties) {
 		super(name, stackable);
+		this.canEquip = canEquip;
 		this.properties = properties;
+	}
+
+	public boolean isCanEquip() {
+		return canEquip;
 	}
 
 	public boolean hasProperty(ItemProperty property) {

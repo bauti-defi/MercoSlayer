@@ -2,6 +2,7 @@ package scripts.com.mercosur.slayer.models.npcs.monster;
 
 import org.tribot.api2007.types.RSArea;
 import scripts.com.mercosur.slayer.models.items.ItemProperty;
+import scripts.com.mercosur.slayer.models.npcs.AttackStyle;
 
 public class Monster {
 
@@ -16,10 +17,6 @@ public class Monster {
 	private final FinalBlowMonsterMechanic finalBlowMonsterMechanic;
 
 	private final AttackStyle[] attackStyles;
-
-	public enum AttackStyle {
-		MELEE, MAGIC, RANGE
-	}
 
 	public Monster(final String name, final int level, final ItemProperty[] requiredItemProperties, final RSArea area, final FinalBlowMonsterMechanic finalBlowMonsterMechanic, final AttackStyle[] attackStyles) {
 		this.name = name;
