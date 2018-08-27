@@ -101,7 +101,7 @@ public class FightingNode extends Node {
 				return -1;
 			}
 			return 0;
-		}).filter(rsTile -> PathFinding.canReach(rsTile, false)).findFirst().orElse(null);
+		}).filter(rsTile -> PathFinding.canReach(rsTile, true) && PathFinding.isTileWalkable(rsTile)).findFirst().orElse(null);
 	}
 
 	private boolean inCombat() {
@@ -111,7 +111,7 @@ public class FightingNode extends Node {
 	}
 
 	private boolean canTarget(RSNPC npc) {
-		if (npc != null && npc.isClickable() && npc.isValid() && npc.getName().equalsIgnoreCase(currentMonster.getName()) && PathFinding.canReach(npc.getPosition(), false)) {
+		if (npc != null && npc.isClickable() && npc.isValid() && npc.getName().equalsIgnoreCase(currentMonster.getName()) && PathFinding.canReach(npc.getPosition(), true)) {
 			return !npc.isInCombat() && npc.getInteractingCharacter() == null || npc.getInteractingCharacter() != null && npc.getInteractingCharacter().equals(Player.getRSPlayer());
 		}
 		return false;
