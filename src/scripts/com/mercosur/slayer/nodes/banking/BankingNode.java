@@ -25,7 +25,7 @@ public class BankingNode extends Node {
 
 	@Override
 	public boolean condition() {
-		return requiresCriticalBanking() || requiresPassiveBanking();
+		return requiresCriticalBanking() || requiresPassiveBanking() && Banking.isInBank();
 	}
 
 	@Override
