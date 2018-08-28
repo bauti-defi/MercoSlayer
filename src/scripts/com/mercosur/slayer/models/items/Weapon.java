@@ -6,8 +6,8 @@ public class Weapon extends Item {
 
 	private final AttackStyle attackStyle;
 
-	public Weapon(final String name, final boolean stackable, final AttackStyle attackStyle, final ItemProperty... properties) {
-		super(name, stackable, true, properties);
+	public Weapon(final String name, final boolean mutatableName, final boolean stackable, final AttackStyle attackStyle, final ItemProperty... properties) {
+		super(name, mutatableName, stackable, true, properties);
 		this.attackStyle = attackStyle;
 	}
 

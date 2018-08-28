@@ -1,6 +1,7 @@
 package scripts.com.mercosur.slayer.models.npcs;
 
 import org.tribot.api2007.types.RSTile;
+import scripts.com.mercosur.slayer.models.travel.SlayerRegion;
 
 public class SlayerMaster {
 
@@ -10,13 +11,20 @@ public class SlayerMaster {
 
 	private final int requiredCombat;
 
+	private final SlayerRegion slayerRegion;
+
 	private final RSTile location;
 
-	public SlayerMaster(final String name, final int requiredSlayerLevel, final int requiredCombat, final RSTile location) {
+	public SlayerMaster(final String name, final int requiredSlayerLevel, final int requiredCombat, final SlayerRegion slayerRegion, final RSTile location) {
 		this.name = name;
 		this.requiredSlayerLevel = requiredSlayerLevel;
 		this.requiredCombat = requiredCombat;
+		this.slayerRegion = slayerRegion;
 		this.location = location;
+	}
+
+	public SlayerRegion getSlayerRegion() {
+		return slayerRegion;
 	}
 
 	public String getName() {

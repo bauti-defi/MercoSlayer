@@ -2,12 +2,15 @@ package scripts.com.mercosur.slayer.models.items;
 
 public abstract class AbstractItem {
 
-	private String name;
+	private final String name;
 
-	private boolean stackable;
+	private final boolean mutatableName;
 
-	public AbstractItem(final String name, final boolean stackable) {
+	private final boolean stackable;
+
+	public AbstractItem(final String name, final boolean mutatableName, final boolean stackable) {
 		this.name = name;
+		this.mutatableName = mutatableName;
 		this.stackable = stackable;
 	}
 
@@ -17,6 +20,10 @@ public abstract class AbstractItem {
 
 	public boolean isStackable() {
 		return stackable;
+	}
+
+	public boolean isMutatableName() {
+		return mutatableName;
 	}
 
 	@Override

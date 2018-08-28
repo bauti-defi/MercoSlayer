@@ -13,7 +13,7 @@ public class Potion extends AbstractItem {
 	}
 
 	public Potion(final String name, Type type, Skills.SKILLS... skills) {
-		super(name, false);
+		super(name, true, false);
 		this.type = type;
 		this.skills = skills;
 	}

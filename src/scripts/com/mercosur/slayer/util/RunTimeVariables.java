@@ -13,11 +13,11 @@ public class RunTimeVariables {
 
 	public static final ABCUtil ANTIBAN = new ABCUtil();
 
-	public static Monster monster = new Monster("Chicken", 178, null, new RSArea(new RSTile[] {new RSTile(3236, 3293, 0), new RSTile(3236, 3301, 0), new RSTile(3225, 3301, 0), new RSTile(3225, 3294, 0)}), null, new AttackStyle[] {AttackStyle.MELEE});
+	public static Monster monster = new Monster("Chicken", 178, null, new RSArea(new RSTile[] {new RSTile(3236, 3293, 0), new RSTile(3236, 3301, 0), new RSTile(3225, 3301, 0), new RSTile(3225, 3294, 0)}), null, null, new AttackStyle[] {AttackStyle.MELEE});
 
 	public static SlayerAssignment currentSlayerAssignment = new SlayerAssignment(monster, 100);
 
-	public static SlayerMaster currentSlayerMaster = new SlayerMaster("name", 1, 1, null);
+	public static SlayerMaster currentSlayerMaster = new SlayerMaster("name", 1, 1, null, null);
 
 	public static Food FOOD = new Food("Monkfish");
 
