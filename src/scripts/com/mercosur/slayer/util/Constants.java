@@ -23,5 +23,5 @@ public class Constants {
 
 	public static final RouteItem ECTOPHIAL = new RouteItem("Ectophial", false, false, 1);
 
-	public static final RouteItem HOUSE_TELEPORT_TAB = new RouteItem("House Teleport", false, true, 4);
+	public static final RouteItem HOUSE_TELEPORT_TAB = new RouteItem("House Teleport", false, true, 4); //Any house teleport action with this
 }

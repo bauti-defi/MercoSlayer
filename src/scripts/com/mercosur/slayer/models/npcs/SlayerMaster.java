@@ -3,7 +3,7 @@ package scripts.com.mercosur.slayer.models.npcs;
 import org.tribot.api2007.types.RSTile;
 import scripts.com.mercosur.slayer.models.travel.SlayerRegion;
 
-public class SlayerMaster {
+public class SlayerMaster {//turn this into an enum
 
 	private final String name;
 

@@ -28,6 +28,6 @@ public abstract class AbstractItem {
 
 	@Override
 	public String toString() {
-		return name + ":" + (stackable ? "Stackable" : "Non-Stackable");
+		return name + ":" + (mutatableName ? "Mutatable" : "Non-Mutatable") + ":" + (stackable ? "Stackable" : "Non-Stackable");
 	}
 }
