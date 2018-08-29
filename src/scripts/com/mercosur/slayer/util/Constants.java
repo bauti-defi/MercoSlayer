@@ -1,7 +1,7 @@
 package scripts.com.mercosur.slayer.util;
 
+import org.tribot.api2007.types.RSTile;
 import scripts.com.mercosur.slayer.models.npcs.AttackStyle;
-import scripts.com.mercosur.slayer.models.travel.RouteItem;
 
 import java.util.stream.Stream;
 
@@ -17,11 +17,6 @@ public class Constants {
 		return Stream.of(MELEE_WEAPON_KEYWORDS).anyMatch(keyword -> weaponName.toLowerCase().contains(keyword)) ? AttackStyle.MELEE : AttackStyle.RANGE;
 	}
 
-	public static final RouteItem AMULET_OF_GLORY = new RouteItem("Amulet of Glory", true, false, 1);
+	public static final RSTile VANNAKA_TILE = new RSTile(3146, 9913, 0);
 
-	public static final RouteItem COINS = new RouteItem("Coins", false, true, 2000);
-
-	public static final RouteItem ECTOPHIAL = new RouteItem("Ectophial", false, false, 1);
-
-	public static final RouteItem HOUSE_TELEPORT_TAB = new RouteItem("House Teleport", false, true, 4); //Any house teleport action with this
 }

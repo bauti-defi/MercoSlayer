@@ -2,8 +2,11 @@ package scripts.com.mercosur.slayer.models.npcs;
 
 import org.tribot.api2007.types.RSTile;
 import scripts.com.mercosur.slayer.models.travel.SlayerRegion;
+import scripts.com.mercosur.slayer.util.Constants;
 
-public class SlayerMaster {//turn this into an enum
+public enum SlayerMaster {
+
+	VANNAKA("Vannaka", 1, 40, SlayerRegion.EDGEVILLE_DUNGEON, Constants.VANNAKA_TILE);
 
 	private final String name;
 
@@ -15,7 +18,7 @@ public class SlayerMaster {//turn this into an enum
 
 	private final RSTile location;
 
-	public SlayerMaster(final String name, final int requiredSlayerLevel, final int requiredCombat, final SlayerRegion slayerRegion, final RSTile location) {
+	SlayerMaster(final String name, final int requiredSlayerLevel, final int requiredCombat, final SlayerRegion slayerRegion, final RSTile location) {
 		this.name = name;
 		this.requiredSlayerLevel = requiredSlayerLevel;
 		this.requiredCombat = requiredCombat;

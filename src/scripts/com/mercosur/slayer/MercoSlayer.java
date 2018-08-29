@@ -10,13 +10,14 @@ import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentialsProvider;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.NodeScript;
 import scripts.com.mercosur.slayer.nodes.FightingNode;
+import scripts.com.mercosur.slayer.nodes.taskretrieval.RetrieveTaskNode;
 import scripts.com.mercosur.slayer.util.RunTimeVariables;
 
 @ScriptManifest(name = "MercoSlayer", authors = {"Mercosur"}, description = "Trains slayer in OSRS.", category = "Slayer", gameMode = 1)
 public class MercoSlayer extends NodeScript {
 
 	public MercoSlayer() {
-		super(new FightingNode());
+		super(new FightingNode(), new RetrieveTaskNode());
 
 		WebWalkerServerApi.getInstance().setDaxCredentialsProvider(new DaxCredentialsProvider() {
 			@Override

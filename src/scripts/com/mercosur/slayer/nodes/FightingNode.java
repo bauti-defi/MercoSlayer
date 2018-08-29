@@ -25,7 +25,7 @@ public class FightingNode extends Node {
 
 	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 
-	private Monster currentMonster = currentSlayerAssignment.getMonster();
+	private Monster currentMonster = currentSlayerAssignment != null ? currentSlayerAssignment.getMonster() : null;
 
 	private RSNPC currentTarget;
 
