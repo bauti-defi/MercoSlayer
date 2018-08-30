@@ -147,7 +147,6 @@ public class GUI extends Application {
 	}
 
 	public void show() {
-
 		if (stage == null)
 			return;
 
@@ -157,7 +156,6 @@ public class GUI extends Application {
 	}
 
 	public void close() {
-
 		if (stage == null)
 			return;
 
@@ -166,8 +164,8 @@ public class GUI extends Application {
 		Platform.runLater(() -> stage.close());
 	}
 
-	public boolean isOpen() {
-		return isOpen;
+	public boolean isShowing() {
+		return stage.isShowing();
 	}
 
 	private void waitForInit() {

@@ -14,31 +14,27 @@ public class NodeScript extends Script {
 
 	private GUI gui;
 
-	private URL fxml;
+	protected void addNode(Node node) {
+		this.nodes.add(node);
+	}
 
-	public NodeScript(Node... nodes) {
-		for (Node node : nodes) {
-			this.nodes.add(node);
-		}
-		sortNodes();
-		println("Nodes configured.");
+	protected void addGUI(URL fxml) {
+		this.gui = new GUI(fxml);
 	}
 
 	@Override
 	public void run() {
-		/*try {
-			fxml = new File(Util.getWorkingDirectory() + File.separator + "bin" + File.separator + "scripts" + File.separator + "com" + File.separator + "mercosur" + File.separator + "slayer" + File.separator + "gui" + File.separator + "main.fxml").toURI().toURL();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+		if (gui != null) {
+			println("Opening GUI");
+			gui.show();
+			do {
+				sleep(500);
+			} while (gui.isShowing());
+
+			println("GUI closed.");
 		}
-		gui = new GUI(fxml);
-		gui.show();
-		do {
-			sleep(500);
-		} while (gui.isOpen());*/
 
-		println("GUI closed.");
-
+		sortNodes();
 		while (!nodes.isEmpty()) {
 			for (Node node : nodes) {
 				if (node.condition()) {
