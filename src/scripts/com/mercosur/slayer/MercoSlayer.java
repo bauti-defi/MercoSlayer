@@ -12,7 +12,6 @@ import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentials;
 import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentialsProvider;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.NodeScript;
-import scripts.com.mercosur.slayer.data.Cache;
 import scripts.com.mercosur.slayer.data.Constants;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.nodes.FightingNode;
@@ -31,7 +30,6 @@ public class MercoSlayer extends NodeScript implements Starting, PreEnding {
 	public MercoSlayer() {
 		addNode(new FightingNode());
 		addNode(new RetrieveTaskNode());
-		Cache.getContext();
 		try {
 			addGUI(new File(Util.getWorkingDirectory() + File.separator + "bin" + File.separator + "scripts" + File.separator + "com" + File.separator + "mercosur" + File.separator + "slayer" + File.separator + "gui" + File.separator + "main.fxml").toURI().toURL());
 		} catch (MalformedURLException e) {

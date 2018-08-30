@@ -103,7 +103,7 @@ public class Cache {
 		return instance.context;
 	}
 
-	private final class CacheContext {
+	public final class CacheContext {
 
 		private Task[] tasks;
 

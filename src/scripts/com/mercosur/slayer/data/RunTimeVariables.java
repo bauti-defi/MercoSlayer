@@ -4,16 +4,17 @@ import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
-import scripts.com.mercosur.slayer.models.Task;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
 import scripts.com.mercosur.slayer.models.npcs.AttackStyle;
 import scripts.com.mercosur.slayer.models.npcs.SlayerMaster;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
-
-import java.util.ArrayList;
-import java.util.List;
+import scripts.com.mercosur.slayer.nodes.taskretrieval.TaskPreferences;
 
 public class RunTimeVariables {
+
+	static {
+		Cache.getContext();
+	}
 
 	public static final ABCUtil ANTIBAN = new ABCUtil();
 
@@ -21,11 +22,10 @@ public class RunTimeVariables {
 
 	public static SlayerAssignment currentSlayerAssignment = null;//new SlayerAssignment(monster, 100);
 
-	public static SlayerMaster currentSlayerMaster = SlayerMaster.VANNAKA;
+	public static SlayerMaster SLAYER_MASTER = SlayerMaster.VANNAKA;
 
-	public static Food FOOD = new Food("Monkfish");
+	public static TaskPreferences TASK_PREFERENCE = TaskPreferences.WEAKEST;
 
-	public static final List<Task> tasks = new ArrayList<>();
-
+	public static final Food FOOD = new Food("Monkfish");
 
 }

@@ -11,16 +11,25 @@ import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
+import scripts.com.mercosur.slayer.data.Cache;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
+import scripts.com.mercosur.slayer.models.Task;
 import scripts.com.mercosur.slayer.models.npcs.SlayerMaster;
+import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
 import scripts.com.mercosur.slayer.util.Sleep;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RetrieveTaskNode extends Node {
 
 	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 
-	private SlayerMaster currentSlayerMaster = RunTimeVariables.currentSlayerMaster;
+	private SlayerMaster currentSlayerMaster = RunTimeVariables.SLAYER_MASTER;
+
+	private TaskPreferences taskPreferences = RunTimeVariables.TASK_PREFERENCE;
 
 	public RetrieveTaskNode() {
 		super(NodePriority.HIGH);
@@ -69,11 +78,65 @@ public class RetrieveTaskNode extends Node {
 					}
 				} else {
 					final String assignmentMessage = NPCChat.getMessage();
+					final String taskName = parseTaskName(assignmentMessage);
+					final int killsRequired = parseTaskKillsRequired(assignmentMessage);
+					final Task assignedTask = Stream.of(Cache.getContext().getTasks())
+							.filter(task -> task.getName().equalsIgnoreCase(taskName))
+							.findFirst().orElseThrow(() -> new TaskRenewalException("Task: " + taskName + " not supported"));
+
+					RunTimeVariables.currentSlayerAssignment = currentSlayerAssignment = new SlayerAssignment(getOptimalMonsterForTask(assignedTask), killsRequired);
+					General.println("New task: " + currentSlayerAssignment.getAssignedAmount() + " " + currentSlayerAssignment.getMonster().getName());
 				}
 			}
 		}
 		return Response.CONTINUE;
 	}
+
+	private String parseTaskName(String message) {
+		return message;//TODO: correctly parse task name from message
+	}
+
+	private int parseTaskKillsRequired(String message) {
+		return 100;//TODO: correctly parse task amount from message
+	}
+
+	private final Monster getOptimalMonsterForTask(Task task) {
+		if (task.getMonsters().isEmpty()) {
+			throw new NullPointerException("Task options null.");
+		} else if (task.getMonsters().size() == 1) {
+			return task.getMonsters().get(0);
+		}
+
+		List<Monster> monsterStream = task.getMonsters().stream().sorted((monster1, monster2) -> {
+			if (monster1.getLevel() > monster2.getLevel()) {
+				return -1;
+			} else if (monster1.getLevel() < monster2.getLevel()) {
+				return 1;
+			}
+			return 0;
+		}).collect(Collectors.toList());//TODO: Make better preference options
+
+		switch (taskPreferences) {
+			case WEAKEST:
+				return monsterStream.get(0);
+			case MIDDLE:
+				if (monsterStream.size() > 2) {
+					return monsterStream.get(1);
+				}
+			case STRONGEST:
+				return monsterStream.get(monsterStream.size() - 1);
+			default:
+				return monsterStream.get(0);
+		}
+
+	}
+
+	/*
+	Priority options
+	-points (lowest cb)
+	-cash (dynamic)
+	-exp (most exp per kill)
+	 */
 
 	public static boolean isInDialogue() {
 		return !(NPCChat.getName() == null && NPCChat.getClickContinueInterface() == null
