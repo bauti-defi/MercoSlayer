@@ -6,11 +6,14 @@ import org.tribot.util.Util;
 import scripts.com.mercosur.slayer.models.Task;
 import scripts.com.mercosur.slayer.models.items.Item;
 import scripts.com.mercosur.slayer.models.items.Weapon;
+import scripts.com.mercosur.slayer.models.items.consumable.Food;
+import scripts.com.mercosur.slayer.models.items.consumable.Potion;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
 import scripts.com.mercosur.slayer.util.Directory;
 import scripts.com.mercosur.slayer.util.InvalidFileNameException;
 
 import java.io.*;
+import java.util.stream.Stream;
 
 public class Cache {
 
@@ -109,6 +112,10 @@ public class Cache {
 
 		private Monster[] monsters;
 
+		private Food[] foods;
+
+		private Potion[] potions;
+
 		private Item[] items;
 
 		private Weapon[] weapons;
@@ -121,16 +128,48 @@ public class Cache {
 			return tasks;
 		}
 
+		public Stream<Task> getTaskStream() {
+			return Stream.of(tasks);
+		}
+
 		public Monster[] getMonsters() {
 			return monsters;
+		}
+
+		public Stream<Monster> getMonsterStream() {
+			return Stream.of(monsters);
+		}
+
+		public Food[] getFoods() {
+			return foods;
+		}
+
+		public Stream<Food> getFoodStream() {
+			return Stream.of(foods);
+		}
+
+		public Potion[] getPotions() {
+			return potions;
+		}
+
+		public Stream<Potion> getPotionStream() {
+			return Stream.of(potions);
 		}
 
 		public Item[] getItems() {
 			return items;
 		}
 
+		public Stream<Item> getItemStream() {
+			return Stream.of(items);
+		}
+
 		public Weapon[] getWeapons() {
 			return weapons;
+		}
+
+		public Stream<Weapon> getWeaponStream() {
+			return Stream.of(weapons);
 		}
 	}
 }

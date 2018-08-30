@@ -5,6 +5,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
+import scripts.com.mercosur.slayer.data.Cache;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
@@ -12,15 +13,12 @@ import scripts.com.mercosur.slayer.models.items.Item;
 import scripts.com.mercosur.slayer.models.items.ItemProperty;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ItemManager extends Node {
-
-	//All mapped items
-	public static final List<AbstractItem> ITEMS = new ArrayList<>();
 
 	private final Food food = RunTimeVariables.FOOD;
 
@@ -41,6 +39,7 @@ public class ItemManager extends Node {
 	@Override
 	public Response execute() {
 		//calculate inventory and equipmet
+
 		//send bank requests to banking node accordingly
 		return Response.CONTINUE;
 	}
@@ -71,8 +70,7 @@ public class ItemManager extends Node {
 
 	private List<Item> getAllVariationsOfRequiredItems() {
 		final List<ItemProperty> requiredItemProperties = getAllRequiredItemProperties();
-		return ITEMS.stream().filter(abstractItem -> abstractItem instanceof Item)
-				.map(abstractItem -> (Item) abstractItem)
+		return Stream.concat(Cache.getContext().getItemStream(), Cache.getContext().getWeaponStream())
 				.filter(item -> requiredItemProperties.stream().anyMatch(property -> item.hasProperty(property)))
 				.collect(Collectors.toList());
 	}

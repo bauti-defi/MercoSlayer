@@ -31,6 +31,8 @@ public class RetrieveTaskNode extends Node {
 
 	private TaskPreferences taskPreferences = RunTimeVariables.TASK_PREFERENCE;
 
+	private boolean needToAskSlayerMaster = false;
+
 	public RetrieveTaskNode() {
 		super(NodePriority.HIGH);
 	}
@@ -38,16 +40,24 @@ public class RetrieveTaskNode extends Node {
 	@Override
 	public boolean condition() {
 		if (currentSlayerAssignment == null) {
-			if (closeToSlayerMasterLocation()) {
+			if (needToAskSlayerMaster) {
+				if (closeToSlayerMasterLocation()) {
+					return true;
+				} else {
+					General.println("Walking to " + currentSlayerMaster.getName());
+					DaxWalker.walkTo(currentSlayerMaster.getLocation(), () -> {
+						if (closeToSlayerMasterLocation()) {
+							return WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS;
+						}
+						return WalkingCondition.State.CONTINUE_WALKER;
+					});
+				}
+			} else if (hasItemToConsultCurrentTask()) {
+				//consult gem/helm
 				return true;
 			} else {
-				General.println("Walking to " + currentSlayerMaster.getName());
-				DaxWalker.walkTo(currentSlayerMaster.getLocation(), () -> {
-					if (closeToSlayerMasterLocation()) {
-						return WalkingCondition.State.EXIT_OUT_WALKER_SUCCESS;
-					}
-					return WalkingCondition.State.CONTINUE_WALKER;
-				});
+				General.println("Grabbing ");
+				DaxWalker.walkToBank();
 			}
 		}
 		return false;
@@ -55,41 +65,48 @@ public class RetrieveTaskNode extends Node {
 
 	@Override
 	public Node.Response execute() {
-		final RSNPC master = NPCs.find(currentSlayerMaster.getName())[0];
-		if (master != null) {
-			if (!closeToSlayerMaster(master)) {
-				if (!Walking.blindWalkTo(master.getPosition(), new Condition() {
-					@Override
-					public boolean active() {
-						return closeToSlayerMaster(master);
-					}
-				}, General.randomLong(7000, 9000))) {
-					throw new TaskRenewalException("Failed to get closer to " + currentSlayerMaster.getName());
-				}
-			} else if (master.isClickable() && master.isValid()) {
-				if (!isInDialogue()) {
-					if (!Sleep.conditionalSleep(new Condition() {
+		if (needToAskSlayerMaster) {
+			final RSNPC master = NPCs.find(currentSlayerMaster.getName())[0];
+			if (master != null) {
+				if (!closeToSlayerMaster(master)) {
+					if (!Walking.blindWalkTo(master.getPosition(), new Condition() {
 						@Override
 						public boolean active() {
-							return master.click("Assignment") && isInDialogue();
+							return closeToSlayerMaster(master);
 						}
-					}, 5000, 7000)) {
-						throw new TaskRenewalException("Failed to enter dialogue with " + currentSlayerMaster.getName());
+					}, General.randomLong(7000, 9000))) {
+						throw new TaskRenewalException("Failed to get closer to " + currentSlayerMaster.getName());
 					}
-				} else {
-					final String assignmentMessage = NPCChat.getMessage();
-					final String taskName = parseTaskName(assignmentMessage);
-					final int killsRequired = parseTaskKillsRequired(assignmentMessage);
-					final Task assignedTask = Stream.of(Cache.getContext().getTasks())
-							.filter(task -> task.getName().equalsIgnoreCase(taskName))
-							.findFirst().orElseThrow(() -> new TaskRenewalException("Task: " + taskName + " not supported"));
+				} else if (master.isClickable() && master.isValid()) {
+					if (!isInDialogue()) {
+						if (!Sleep.conditionalSleep(new Condition() {
+							@Override
+							public boolean active() {
+								return master.click("Assignment") && isInDialogue();
+							}
+						}, 5000, 7000)) {
+							throw new TaskRenewalException("Failed to enter dialogue with " + currentSlayerMaster.getName());
+						}
+					} else {
+						final String assignmentMessage = NPCChat.getMessage();
+						final String taskName = parseTaskName(assignmentMessage);
+						final int killsRequired = parseTaskKillsRequired(assignmentMessage);
+						final Task assignedTask = Stream.of(Cache.getContext().getTasks())
+								.filter(task -> task.getName().equalsIgnoreCase(taskName))
+								.findFirst().orElseThrow(() -> new TaskRenewalException("Task: " + taskName + " not supported"));
 
-					RunTimeVariables.currentSlayerAssignment = currentSlayerAssignment = new SlayerAssignment(getOptimalMonsterForTask(assignedTask), killsRequired);
-					General.println("New task: " + currentSlayerAssignment.getAssignedAmount() + " " + currentSlayerAssignment.getMonster().getName());
+						RunTimeVariables.currentSlayerAssignment = currentSlayerAssignment = new SlayerAssignment(getOptimalMonsterForTask(assignedTask), killsRequired);
+						General.println("New task: " + currentSlayerAssignment.getAssignedAmount() + " " + currentSlayerAssignment.getMonster().getName());
+						needToAskSlayerMaster = false;
+					}
 				}
 			}
 		}
 		return Response.CONTINUE;
+	}
+
+	private boolean hasItemToConsultCurrentTask() {
+		return false;//TODO: Check for item with TASK_CONSULTING property
 	}
 
 	private String parseTaskName(String message) {
