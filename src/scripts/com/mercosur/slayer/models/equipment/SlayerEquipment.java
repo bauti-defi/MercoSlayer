@@ -24,6 +24,11 @@ public class SlayerEquipment {
 		Stream.of(Equipment.getItems()).forEach(rsItem -> equipment.put(rsItem.getEquipmentSlot(), rsItem));
 	}
 
+	public HashMap<Equipment.SLOTS, RSItem> getUpdatedEquipment() {
+		updateEquipment();
+		return equipment;
+	}
+
 	private final void updateEquipment(Equipment.SLOTS slot) {
 		equipment.put(slot, Equipment.getItem(slot));
 	}
