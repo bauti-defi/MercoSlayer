@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * A JSON array. JSONObject supports java.util.List interface.
+ * A JSON array. JSONObject supports java.data.List interface.
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */

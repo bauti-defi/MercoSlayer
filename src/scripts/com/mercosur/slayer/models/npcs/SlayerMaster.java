@@ -1,8 +1,8 @@
 package scripts.com.mercosur.slayer.models.npcs;
 
 import org.tribot.api2007.types.RSTile;
+import scripts.com.mercosur.slayer.data.Constants;
 import scripts.com.mercosur.slayer.models.travel.SlayerRegion;
-import scripts.com.mercosur.slayer.util.Constants;
 
 public enum SlayerMaster {
 

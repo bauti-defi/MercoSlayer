@@ -5,12 +5,12 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
+import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
 import scripts.com.mercosur.slayer.models.items.Item;
 import scripts.com.mercosur.slayer.models.items.ItemProperty;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
-import scripts.com.mercosur.slayer.util.RunTimeVariables;
 
 import java.util.ArrayList;
 import java.util.Arrays;

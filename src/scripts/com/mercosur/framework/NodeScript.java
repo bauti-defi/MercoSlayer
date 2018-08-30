@@ -51,6 +51,12 @@ public class NodeScript extends Script {
 		}
 	}
 
+	protected void onStop() {
+		if (gui != null) {
+			gui.close();
+		}
+	}
+
 	private void sortNodes() {
 		nodes.sort((node1, node2) -> {
 			if (node1.getPriority().getRank() > node2.getPriority().getRank()) {

@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.util;
+package scripts.com.mercosur.slayer.data;
 
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.types.RSArea;

@@ -6,9 +6,9 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
+import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
 import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
-import scripts.com.mercosur.slayer.util.RunTimeVariables;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 import java.util.stream.Stream;

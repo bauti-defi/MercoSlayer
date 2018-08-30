@@ -5,7 +5,7 @@ import org.tribot.api2007.Game;
 import org.tribot.api2007.Options;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
-import scripts.com.mercosur.slayer.util.RunTimeVariables;
+import scripts.com.mercosur.slayer.data.RunTimeVariables;
 
 public class AntibanNode extends Node {
 

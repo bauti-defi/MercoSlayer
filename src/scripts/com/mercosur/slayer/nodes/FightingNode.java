@@ -12,9 +12,9 @@ import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
+import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
-import scripts.com.mercosur.slayer.util.RunTimeVariables;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 import java.util.stream.Stream;

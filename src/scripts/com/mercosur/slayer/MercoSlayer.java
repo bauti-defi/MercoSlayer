@@ -12,14 +12,16 @@ import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentials;
 import scripts.com.mercosur.dax_api.api_lib.models.DaxCredentialsProvider;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.NodeScript;
+import scripts.com.mercosur.slayer.data.Cache;
+import scripts.com.mercosur.slayer.data.Constants;
+import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.nodes.FightingNode;
 import scripts.com.mercosur.slayer.nodes.taskretrieval.RetrieveTaskNode;
-import scripts.com.mercosur.slayer.util.RunTimeVariables;
 
 import java.io.File;
 import java.net.MalformedURLException;
 
-@ScriptManifest(name = "MercoSlayer", authors = {"Mercosur"}, description = "Trains slayer in OSRS.", category = "Slayer", gameMode = 1)
+@ScriptManifest(name = Constants.SCRIPT_NAME, authors = {"Mercosur"}, description = "Trains slayer in OSRS.", category = "Slayer", gameMode = 1)
 public class MercoSlayer extends NodeScript implements Starting, PreEnding {
 
 	public static final String WALKER_KEY = "sub_DPjXXzL5DeSiPf";
@@ -29,7 +31,7 @@ public class MercoSlayer extends NodeScript implements Starting, PreEnding {
 	public MercoSlayer() {
 		addNode(new FightingNode());
 		addNode(new RetrieveTaskNode());
-
+		Cache.getContext();
 		try {
 			addGUI(new File(Util.getWorkingDirectory() + File.separator + "bin" + File.separator + "scripts" + File.separator + "com" + File.separator + "mercosur" + File.separator + "slayer" + File.separator + "gui" + File.separator + "main.fxml").toURI().toURL());
 		} catch (MalformedURLException e) {
@@ -78,6 +80,7 @@ public class MercoSlayer extends NodeScript implements Starting, PreEnding {
 
 	@Override
 	public void onPreEnd() {
+		onStop();
 		General.println("Thank you for using MercoSlayer.");
 	}
 }
