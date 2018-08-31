@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.tribot.util.Util;
 import scripts.com.mercosur.slayer.models.equipment.SlayerEquipment;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
+import scripts.com.mercosur.slayer.models.items.consumable.Potion;
 import scripts.com.mercosur.slayer.models.npcs.SlayerMaster;
 import scripts.com.mercosur.slayer.nodes.taskretrieval.TaskPreferences;
 import scripts.com.mercosur.slayer.util.Directory;
@@ -22,6 +23,7 @@ public class ScriptSettings {
 
 	private Food food;
 
+	private Potion[] potions;
 
 	private ScriptSettings(Builder builder) {
 		if (!validate()) {
@@ -35,6 +37,7 @@ public class ScriptSettings {
 		this.slayerMaster = builder.slayerMaster;
 		this.taskPreferences = builder.taskPreferences;
 		this.food = builder.food;
+		this.potions = builder.potions;
 	}
 
 	public ScriptSettings() {
@@ -85,6 +88,10 @@ public class ScriptSettings {
 		return taskPreferences;
 	}
 
+	public Potion[] getPotions() {
+		return potions;
+	}
+
 	public Food getFood() {
 		return food;
 	}
@@ -111,6 +118,8 @@ public class ScriptSettings {
 
 		private final Food food;
 
+		private Potion[] potions;
+
 		public Builder(final SlayerMaster slayerMaster, final Food food) {
 			this.slayerMaster = slayerMaster;
 			this.food = food;
@@ -133,6 +142,11 @@ public class ScriptSettings {
 
 		public ScriptSettings.Builder setMagicEquipmentPreset(final SlayerEquipment magicEquipmentPreset) {
 			this.magicEquipmentPreset = magicEquipmentPreset;
+			return this;
+		}
+
+		public ScriptSettings.Builder setPotions(Potion... potions) {
+			this.potions = potions;
 			return this;
 		}
 

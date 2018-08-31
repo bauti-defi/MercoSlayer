@@ -4,6 +4,8 @@ import scripts.com.mercosur.slayer.models.items.AbstractItem;
 
 public abstract class BankRequest {
 
+	public static final int ALL = -1;
+
 	private final AbstractItem item;
 
 	private final Urgency urgency;

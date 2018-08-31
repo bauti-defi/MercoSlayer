@@ -7,9 +7,14 @@ import java.util.HashMap;
 
 public class SlayerEquipment {
 
-	private final HashMap<Equipment.SLOTS, RSItem> PRESET = new HashMap<>();
+	private HashMap<Equipment.SLOTS, RSItem> equipment;
+
+	private SlayerEquipment(final HashMap<Equipment.SLOTS, RSItem> equipment) {
+		this.equipment = equipment;
+	}
 
 	public SlayerEquipment() {
+
 	}
 
 }

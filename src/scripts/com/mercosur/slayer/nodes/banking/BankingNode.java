@@ -1,5 +1,6 @@
 package scripts.com.mercosur.slayer.nodes.banking;
 
+import org.tribot.api.General;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Inventory;
@@ -25,7 +26,7 @@ public class BankingNode extends Node {
 
 	@Override
 	public boolean condition() {
-		return requiresCriticalBanking() || requiresPassiveBanking() && Banking.isInBank();
+		return Banking.isBankScreenOpen() || requiresCriticalBanking() || requiresPassiveBanking() && Banking.isInBank();
 	}
 
 	@Override
@@ -33,23 +34,26 @@ public class BankingNode extends Node {
 		if (Banking.isInBank()) {
 			if (Banking.isBankScreenOpen() || Banking.openBankBanker()) { //Bank is open
 				if (shouldDepositAll()) {
-					if (Banking.depositAll() > 0 && requests.removeIf(request -> request instanceof DepositRequest)) {
+					if (Banking.depositAll() == 0 && !requests.removeIf(request -> request instanceof DepositRequest)) {
 						throw new BankingException("Failed to deposit all.");
 					}
 					return Response.CONTINUE;
 				}
 				BankRequest request;
 				while ((request = requests.pop()) != null) { //execute banking requests
-					final boolean sucessfullExecution;
+					final boolean successfulExecution;
 					if (request instanceof DepositRequest) {
-						sucessfullExecution = Banking.deposit(request.getAmount(), request.getItem().getName());
+						if (Inventory.getCount(request.getItem().getName()) == 0) {
+							continue;
+						}
+						successfulExecution = Banking.deposit(request.getAmount(), request.getItem().getName());
 					} else {
-						sucessfullExecution = Banking.withdraw(request.getAmount(), request.getItem().getName());
+						successfulExecution = Banking.withdraw(request.getAmount(), request.getItem().getName());
 					}
 					if (!Sleep.conditionalSleep(new Condition() {
 						@Override
 						public boolean active() {
-							return sucessfullExecution;//break if successfull
+							return successfulExecution;//break if successfull
 						}
 					}, 1500, 2000)) {
 						throw new BankingException(request);
@@ -57,6 +61,7 @@ public class BankingNode extends Node {
 				}
 			}
 		} else {
+			General.println("Walking to bank...");
 			DaxWalker.walkToBank();
 		}
 		return Response.CONTINUE;
@@ -76,27 +81,27 @@ public class BankingNode extends Node {
 	}
 
 	public static void requestCriticalItemWithdraw(AbstractItem item, int amount) {
-		saveWithdrawRequest(item, Urgency.NOW, amount);
+		pushWithdrawRequest(item, Urgency.NOW, amount);
 	}
 
 	public static void requestPassiveItemWithdraw(AbstractItem item, int amount) {
-		saveWithdrawRequest(item, Urgency.NEXT_BANK_VISIT, amount);
+		pushWithdrawRequest(item, Urgency.NEXT_BANK_VISIT, amount);
 	}
 
-	private static void saveWithdrawRequest(AbstractItem item, Urgency urgency, int amount) {
+	private static void pushWithdrawRequest(AbstractItem item, Urgency urgency, int amount) {
 		requests.push(new WithdrawRequest(item, urgency, amount));
 		sortRequest();
 	}
 
 	public static void requestCriticalItemDeposit(AbstractItem item, int amount) {
-		saveDepositRequest(item, Urgency.NOW, amount);
+		pushDepositRequest(item, Urgency.NOW, amount);
 	}
 
 	public static void requestPassiveItemDeposit(AbstractItem item, int amount) {
-		requests.push(new DepositRequest(item, Urgency.NEXT_BANK_VISIT, amount));
+		pushDepositRequest(item, Urgency.NEXT_BANK_VISIT, amount);
 	}
 
-	private static void saveDepositRequest(AbstractItem item, Urgency urgency, int amount) {
+	private static void pushDepositRequest(AbstractItem item, Urgency urgency, int amount) {
 		requests.push(new DepositRequest(item, urgency, amount));
 		sortRequest();
 	}
@@ -109,6 +114,16 @@ public class BankingNode extends Node {
 		return !requests.isEmpty();
 	}
 
+	/*
+	Sorting order is:
+		deposit > withdraw
+				|
+			 urgency
+				|
+			  amount
+			|       |
+		 bigger   smaller
+	 */
 	private static void sortRequest() {
 		requests.sort((request1, request2) -> {
 			if (request1 instanceof DepositRequest) {
@@ -118,7 +133,7 @@ public class BankingNode extends Node {
 					} else if (request1.getUrgency().getTier() < request2.getUrgency().getTier()) {
 						return -1;
 					}
-					return 0;
+					return (request1.getAmount() - request2.getAmount()) >= 0 ? 1 : -1;
 				}
 				return 1;
 			} else if (request2 instanceof DepositRequest) {
@@ -128,7 +143,7 @@ public class BankingNode extends Node {
 			} else if (request1.getUrgency().getTier() < request2.getUrgency().getTier()) {
 				return -1;
 			}
-			return 0;
+			return (request1.getAmount() - request2.getAmount()) <= 0 ? 1 : -1;
 		});
 	}
 }

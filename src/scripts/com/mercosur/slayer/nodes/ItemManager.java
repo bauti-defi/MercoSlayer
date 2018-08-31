@@ -1,47 +1,53 @@
 package scripts.com.mercosur.slayer.nodes;
 
+import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
-import scripts.com.mercosur.framework.Node;
-import scripts.com.mercosur.framework.NodePriority;
+import org.tribot.api2007.types.RSItem;
 import scripts.com.mercosur.slayer.data.Cache;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
-import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
 import scripts.com.mercosur.slayer.models.items.Item;
 import scripts.com.mercosur.slayer.models.items.ItemProperty;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
+import scripts.com.mercosur.slayer.models.items.consumable.Potion;
+import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
+import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ItemManager extends Node {
+public class ItemManager {
 
-	private final Food food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
+	private final Food food;
 
-	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
+	private final Potion[] potions;
 
-	public ItemManager() {
-		super(NodePriority.CRITICAL);
+	private static ItemManager instance;
+
+	private ItemManager() {
+		food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
+		potions = RunTimeVariables.SCRIPT_SETTINGS.getPotions();
 	}
 
-	@Override
-	public boolean condition() {
+	public void notifyItemChange() {
 		if (isLoggedIn()) {
-			return !hasFood() || !hasPotions() || !hasRequiredSlayerAssignmentItems();
+			if (!hasFood()) {
+				BankingNode.requestCriticalItemWithdraw(food, BankRequest.ALL);
+			}
+			if (!hasPotions()) {
+				Stream.of(potions).filter(potion -> !hasItemInInventory(potion))
+						.forEach(potion -> BankingNode.requestCriticalItemWithdraw(potion, 1));
+			}
+			if (!hasRequiredSlayerAssignmentItems()) {
+				getAllVariationsOfRequiredItems().stream()
+						.filter(item -> !hasItemInInventory(item) && !hasItemEquiped(item))
+						.forEach(item -> BankingNode.requestCriticalItemWithdraw(item, item.isStackable() ? 300 : 1));
+			}
 		}
-		return false;
-	}
-
-	@Override
-	public Response execute() {
-		//calculate inventory and equipmet
-
-		//send bank requests to banking node accordingly
-		return Response.CONTINUE;
 	}
 
 	private boolean isLoggedIn() {
@@ -49,6 +55,14 @@ public class ItemManager extends Node {
 	}
 
 	private boolean hasItemInInventory(AbstractItem item) {
+		if (item.isMutatableName()) {
+			return Inventory.find(new Filter<RSItem>() {
+				@Override
+				public boolean accept(final RSItem rsItem) {
+					return rsItem.name.contains(item.getName());
+				}
+			}).length > 0;
+		}
 		return Inventory.getCount(item.getName()) > 0;
 	}
 
@@ -61,11 +75,11 @@ public class ItemManager extends Node {
 	}
 
 	private boolean hasPotions() {
-		return false;
+		return Stream.of(potions).anyMatch(potion -> !hasItemInInventory(potion));
 	}
 
 	private List<ItemProperty> getAllRequiredItemProperties() {
-		return Arrays.asList(currentSlayerAssignment.getMonster().getRequiredItemProperties());
+		return Arrays.asList(RunTimeVariables.currentSlayerAssignment.getMonster().getRequiredItemProperties());
 	}
 
 	private List<Item> getAllVariationsOfRequiredItems() {
@@ -76,10 +90,14 @@ public class ItemManager extends Node {
 	}
 
 	private boolean hasRequiredSlayerAssignmentItems() {
-		if (currentSlayerAssignment != null) {
+		if (RunTimeVariables.currentSlayerAssignment != null) {
 			return getAllVariationsOfRequiredItems().stream().anyMatch(item -> !hasItemInInventory(item) && !hasItemEquiped(item));
 		}
 		return false;
+	}
+
+	public static ItemManager getInstance() {
+		return instance == null ? instance = new ItemManager() : instance;
 	}
 
 }
