@@ -7,6 +7,7 @@ import org.tribot.api2007.Inventory;
 import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.framework.NodePriority;
+import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
 import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
 import scripts.com.mercosur.slayer.nodes.banking.request.DepositRequest;
@@ -22,6 +23,7 @@ public class BankingNode extends Node {
 
 	public BankingNode() {
 		super(NodePriority.VERY_HIGH);
+		insertGlobalPassiveRequest();
 	}
 
 	@Override
@@ -39,6 +41,7 @@ public class BankingNode extends Node {
 					}
 					return Response.CONTINUE;
 				}
+				sortRequest();
 				BankRequest request;
 				while ((request = requests.pop()) != null) { //execute banking requests
 					final boolean successfulExecution;
@@ -59,12 +62,17 @@ public class BankingNode extends Node {
 						throw new BankingException(request);
 					}
 				}
+				insertGlobalPassiveRequest();
 			}
 		} else {
 			General.println("Walking to bank...");
 			DaxWalker.walkToBank();
 		}
 		return Response.CONTINUE;
+	}
+
+	private void insertGlobalPassiveRequest() {
+		requestPassiveItemWithdraw(RunTimeVariables.SCRIPT_SETTINGS.getFood(), BankRequest.ALL);
 	}
 
 	private boolean shouldDepositAll() {
@@ -81,29 +89,29 @@ public class BankingNode extends Node {
 	}
 
 	public static void requestCriticalItemWithdraw(AbstractItem item, int amount) {
-		pushWithdrawRequest(item, Urgency.NOW, amount);
+		upsertWithdrawRequest(item, Urgency.NOW, amount);
 	}
 
 	public static void requestPassiveItemWithdraw(AbstractItem item, int amount) {
-		pushWithdrawRequest(item, Urgency.NEXT_BANK_VISIT, amount);
+		upsertWithdrawRequest(item, Urgency.NEXT_BANK_VISIT, amount);
 	}
 
-	private static void pushWithdrawRequest(AbstractItem item, Urgency urgency, int amount) {
+	private static void upsertWithdrawRequest(AbstractItem item, Urgency urgency, int amount) {
+		requests.removeIf(request -> request instanceof WithdrawRequest && request.getItem().getName().equalsIgnoreCase(item.getName()));
 		requests.push(new WithdrawRequest(item, urgency, amount));
-		sortRequest();
 	}
 
 	public static void requestCriticalItemDeposit(AbstractItem item, int amount) {
-		pushDepositRequest(item, Urgency.NOW, amount);
+		upsertDepositRequest(item, Urgency.NOW, amount);
 	}
 
 	public static void requestPassiveItemDeposit(AbstractItem item, int amount) {
-		pushDepositRequest(item, Urgency.NEXT_BANK_VISIT, amount);
+		upsertDepositRequest(item, Urgency.NEXT_BANK_VISIT, amount);
 	}
 
-	private static void pushDepositRequest(AbstractItem item, Urgency urgency, int amount) {
+	private static void upsertDepositRequest(AbstractItem item, Urgency urgency, int amount) {
+		requests.removeIf(request -> request instanceof DepositRequest && request.getItem().getName().equalsIgnoreCase(item.getName()));
 		requests.push(new DepositRequest(item, urgency, amount));
-		sortRequest();
 	}
 
 	private boolean requiresCriticalBanking() {
@@ -121,16 +129,20 @@ public class BankingNode extends Node {
 			 urgency
 				|
 			  amount
-			|       |
+			|        |
 		 bigger   smaller
 	 */
-	private static void sortRequest() {
+	private void sortRequest() {
 		requests.sort((request1, request2) -> {
 			if (request1 instanceof DepositRequest) {
 				if (request2 instanceof DepositRequest) {
 					if (request1.getUrgency().getTier() > request2.getUrgency().getTier()) {
 						return 1;
 					} else if (request1.getUrgency().getTier() < request2.getUrgency().getTier()) {
+						return -1;
+					} else if (request1.getAmount() == -1) {
+						return 1;
+					} else if (request2.getAmount() == -1) {
 						return -1;
 					}
 					return (request1.getAmount() - request2.getAmount()) >= 0 ? 1 : -1;
@@ -142,6 +154,10 @@ public class BankingNode extends Node {
 				return 1;
 			} else if (request1.getUrgency().getTier() < request2.getUrgency().getTier()) {
 				return -1;
+			} else if (request1.getAmount() == -1) {
+				return -1;
+			} else if (request2.getAmount() == -1) {
+				return 1;
 			}
 			return (request1.getAmount() - request2.getAmount()) <= 0 ? 1 : -1;
 		});

@@ -2,7 +2,9 @@ package scripts.com.mercosur.slayer;
 
 import org.tribot.api.General;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.types.RSItem;
 import org.tribot.script.ScriptManifest;
+import org.tribot.script.interfaces.ItemClicking;
 import org.tribot.script.interfaces.PreEnding;
 import org.tribot.script.interfaces.Starting;
 import org.tribot.util.Util;
@@ -15,13 +17,14 @@ import scripts.com.mercosur.framework.NodeScript;
 import scripts.com.mercosur.slayer.data.Constants;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.nodes.FightingNode;
+import scripts.com.mercosur.slayer.nodes.banking.RequiredItemManager;
 import scripts.com.mercosur.slayer.nodes.taskretrieval.RetrieveTaskNode;
 
 import java.io.File;
 import java.net.MalformedURLException;
 
 @ScriptManifest(name = Constants.SCRIPT_NAME, authors = {"Mercosur"}, description = "Trains slayer in OSRS.", category = "Slayer", gameMode = 1)
-public class MercoSlayer extends NodeScript implements Starting, PreEnding {
+public class MercoSlayer extends NodeScript implements Starting, PreEnding, ItemClicking {
 
 	public static final String WALKER_KEY = "sub_DPjXXzL5DeSiPf";
 
@@ -78,7 +81,19 @@ public class MercoSlayer extends NodeScript implements Starting, PreEnding {
 
 	@Override
 	public void onPreEnd() {
-		onStop();
+		super.onStop();
 		General.println("Thank you for using MercoSlayer.");
+	}
+
+	@Override
+	public void itemClicked(final RSItem rsItem) {
+		switch (rsItem.getType()) {
+			case INVENTORY:
+				RequiredItemManager.getInstance().revalidate();
+				break;
+			case EQUIPMENT:
+				//equipment updated
+				break;
+		}
 	}
 }

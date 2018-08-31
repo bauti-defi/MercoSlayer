@@ -17,6 +17,7 @@ import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.Task;
 import scripts.com.mercosur.slayer.models.npcs.SlayerMaster;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
+import scripts.com.mercosur.slayer.nodes.banking.RequiredItemManager;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 import java.util.List;
@@ -96,8 +97,10 @@ public class RetrieveTaskNode extends Node {
 								.findFirst().orElseThrow(() -> new TaskRenewalException("Task: " + taskName + " not supported"));
 
 						RunTimeVariables.currentSlayerAssignment = currentSlayerAssignment = new SlayerAssignment(getOptimalMonsterForTask(assignedTask), killsRequired);
-						General.println("New task: " + currentSlayerAssignment.getAssignedAmount() + " " + currentSlayerAssignment.getMonster().getName());
 						needToAskSlayerMaster = false;
+						RequiredItemManager.getInstance().revalidate();
+
+						General.println("New task: " + currentSlayerAssignment.getAssignedAmount() + " " + currentSlayerAssignment.getMonster().getName());
 					}
 				}
 			}
@@ -117,6 +120,12 @@ public class RetrieveTaskNode extends Node {
 		return 100;//TODO: correctly parse task amount from message
 	}
 
+	/*
+	Priority options
+	-points (lowest cb)
+	-cash (dynamic)
+	-exp (most exp per kill)
+	 */
 	private final Monster getOptimalMonsterForTask(Task task) {
 		if (task.getMonsters().isEmpty()) {
 			throw new NullPointerException("Task options null.");
@@ -147,13 +156,6 @@ public class RetrieveTaskNode extends Node {
 		}
 
 	}
-
-	/*
-	Priority options
-	-points (lowest cb)
-	-cash (dynamic)
-	-exp (most exp per kill)
-	 */
 
 	public static boolean isInDialogue() {
 		return !(NPCChat.getName() == null && NPCChat.getClickContinueInterface() == null

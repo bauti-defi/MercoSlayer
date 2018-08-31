@@ -1,4 +1,4 @@
-package scripts.com.mercosur.slayer.nodes;
+package scripts.com.mercosur.slayer.nodes.banking;
 
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Equipment;
@@ -12,7 +12,6 @@ import scripts.com.mercosur.slayer.models.items.Item;
 import scripts.com.mercosur.slayer.models.items.ItemProperty;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
 import scripts.com.mercosur.slayer.models.items.consumable.Potion;
-import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
 import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
 
 import java.util.Arrays;
@@ -20,23 +19,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ItemManager {
+public class RequiredItemManager {
 
 	private final Food food;
 
 	private final Potion[] potions;
 
-	private static ItemManager instance;
+	private static RequiredItemManager instance;
 
-	private ItemManager() {
+	private RequiredItemManager() {
 		food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
 		potions = RunTimeVariables.SCRIPT_SETTINGS.getPotions();
 	}
 
-	public void notifyItemChange() {
+	public void revalidate() {
 		if (isLoggedIn()) {
 			if (!hasFood()) {
-				BankingNode.requestCriticalItemWithdraw(food, BankRequest.ALL);
+				BankingNode.requestCriticalItemWithdraw(food, BankRequest.ALL);//When empty, overwrites passive food request
 			}
 			if (!hasPotions()) {
 				Stream.of(potions).filter(potion -> !hasItemInInventory(potion))
@@ -44,7 +43,7 @@ public class ItemManager {
 			}
 			if (!hasRequiredSlayerAssignmentItems()) {
 				getAllVariationsOfRequiredItems().stream()
-						.filter(item -> !hasItemInInventory(item) && !hasItemEquiped(item))
+						.filter(item -> !hasItem(item))
 						.forEach(item -> BankingNode.requestCriticalItemWithdraw(item, item.isStackable() ? 300 : 1));
 			}
 		}
@@ -70,6 +69,10 @@ public class ItemManager {
 		return Equipment.find(item.getName()).length > 0;
 	}
 
+	private boolean hasItem(AbstractItem item) {
+		return hasItemEquiped(item) || hasItemInInventory(item);
+	}
+
 	private boolean hasFood() {
 		return hasItemInInventory(food);
 	}
@@ -91,13 +94,13 @@ public class ItemManager {
 
 	private boolean hasRequiredSlayerAssignmentItems() {
 		if (RunTimeVariables.currentSlayerAssignment != null) {
-			return getAllVariationsOfRequiredItems().stream().anyMatch(item -> !hasItemInInventory(item) && !hasItemEquiped(item));
+			return getAllVariationsOfRequiredItems().stream().anyMatch(item -> !hasItem(item));
 		}
 		return false;
 	}
 
-	public static ItemManager getInstance() {
-		return instance == null ? instance = new ItemManager() : instance;
+	public static RequiredItemManager getInstance() {
+		return instance == null ? instance = new RequiredItemManager() : instance;
 	}
 
 }
