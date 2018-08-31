@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 public class ItemManager extends Node {
 
-	private final Food food = RunTimeVariables.FOOD;
+	private final Food food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
 
 	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 

@@ -69,18 +69,9 @@ public class Cache {
 			loadCache();
 		}
 		if (cache != null && cache.exists()) {
-			try {
-				FileInputStream fileInputStream = new FileInputStream(cache);
-				InputStreamReader isr = new InputStreamReader(fileInputStream);
-				BufferedReader bufferedReader = new BufferedReader(isr);
-				StringBuilder sb = new StringBuilder();
-				String line;
-				while ((line = bufferedReader.readLine()) != null) {
-					sb.append(line);
-				}
-				String json = sb.toString();
+			try (Reader reader = new FileReader(cache)) {
 				Gson gson = new Gson();
-				context = gson.fromJson(json, CacheContext.class);
+				context = gson.fromJson(reader, CacheContext.class);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -88,10 +79,6 @@ public class Cache {
 			}
 			General.println("Cache loaded.");
 		}
-	}
-
-	private Directory getDirectory() {
-		return directory;
 	}
 
 	public String getPath() {

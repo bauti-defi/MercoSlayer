@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class EatingNode extends Node {
 
-	private final Food food = RunTimeVariables.FOOD;
+	private final Food food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
 
 	private int eatAtHP = RunTimeVariables.ANTIBAN.generateEatAtHP();
 

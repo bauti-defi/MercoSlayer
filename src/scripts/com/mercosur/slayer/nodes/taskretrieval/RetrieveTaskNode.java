@@ -27,9 +27,9 @@ public class RetrieveTaskNode extends Node {
 
 	private SlayerAssignment currentSlayerAssignment = RunTimeVariables.currentSlayerAssignment;
 
-	private SlayerMaster currentSlayerMaster = RunTimeVariables.SLAYER_MASTER;
+	private SlayerMaster currentSlayerMaster = RunTimeVariables.SCRIPT_SETTINGS.getSlayerMaster();
 
-	private TaskPreferences taskPreferences = RunTimeVariables.TASK_PREFERENCE;
+	private TaskPreferences taskPreferences = RunTimeVariables.SCRIPT_SETTINGS.getTaskPreferences();
 
 	private boolean needToAskSlayerMaster = false;
 
