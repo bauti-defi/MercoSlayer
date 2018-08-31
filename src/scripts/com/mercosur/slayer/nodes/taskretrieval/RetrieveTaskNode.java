@@ -10,7 +10,6 @@ import org.tribot.api2007.types.RSNPC;
 import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.Node;
-import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.data.Cache;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
@@ -33,10 +32,6 @@ public class RetrieveTaskNode extends Node {
 	private TaskPreferences taskPreferences = RunTimeVariables.SCRIPT_SETTINGS.getTaskPreferences();
 
 	private boolean needToAskSlayerMaster = false;
-
-	public RetrieveTaskNode() {
-		super(NodePriority.HIGH);
-	}
 
 	@Override
 	public boolean condition() {

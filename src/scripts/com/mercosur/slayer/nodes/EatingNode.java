@@ -5,7 +5,6 @@ import org.tribot.api2007.Combat;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
 import scripts.com.mercosur.framework.Node;
-import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
 import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
@@ -18,10 +17,6 @@ public class EatingNode extends Node {
 	private final Food food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
 
 	private int eatAtHP = RunTimeVariables.ANTIBAN.generateEatAtHP();
-
-	public EatingNode() {
-		super(NodePriority.VERY_HIGH);
-	}
 
 	@Override
 	public boolean condition() {

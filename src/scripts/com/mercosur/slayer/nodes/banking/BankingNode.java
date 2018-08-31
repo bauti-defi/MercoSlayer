@@ -6,7 +6,6 @@ import org.tribot.api2007.Banking;
 import org.tribot.api2007.Inventory;
 import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.framework.Node;
-import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
 import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
@@ -22,7 +21,6 @@ public class BankingNode extends Node {
 	private final static Stack<BankRequest> requests = new Stack<>();
 
 	public BankingNode() {
-		super(NodePriority.VERY_HIGH);
 		insertGlobalPassiveRequest();
 	}
 

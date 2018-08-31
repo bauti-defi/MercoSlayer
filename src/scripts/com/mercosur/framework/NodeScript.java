@@ -5,12 +5,11 @@ import org.tribot.script.Script;
 import scripts.com.mercosur.slayer.gui.GUI;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class NodeScript extends Script {
 
-	private final List<Node> nodes = new ArrayList<>();
+	private final LinkedList<Node> nodes = new LinkedList<>();
 
 	private GUI gui;
 
@@ -34,7 +33,6 @@ public class NodeScript extends Script {
 			println("GUI closed.");
 		}
 
-		sortNodes();
 		while (!nodes.isEmpty()) {
 			for (Node node : nodes) {
 				if (node.condition()) {
@@ -55,17 +53,6 @@ public class NodeScript extends Script {
 		if (gui != null) {
 			gui.close();
 		}
-	}
-
-	private void sortNodes() {
-		nodes.sort((node1, node2) -> {
-			if (node1.getPriority().getRank() > node2.getPriority().getRank()) {
-				return 1;
-			} else if (node1.getPriority().getRank() < node2.getPriority().getRank()) {
-				return -1;
-			}
-			return 0;
-		});
 	}
 
 

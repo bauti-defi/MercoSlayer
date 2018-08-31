@@ -11,7 +11,6 @@ import org.tribot.api2007.types.RSTile;
 import scripts.com.mercosur.dax_api.api_lib.DaxWalker;
 import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.Node;
-import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
@@ -28,10 +27,6 @@ public class FightingNode extends Node {
 	private Monster currentMonster = currentSlayerAssignment != null ? currentSlayerAssignment.getMonster() : null;
 
 	private RSNPC currentTarget;
-
-	public FightingNode() {
-		super(NodePriority.VERY_LOW);
-	}
 
 	@Override
 	public boolean condition() {

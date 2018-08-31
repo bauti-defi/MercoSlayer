@@ -4,7 +4,6 @@ import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Options;
 import scripts.com.mercosur.framework.Node;
-import scripts.com.mercosur.framework.NodePriority;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 
 public class AntibanNode extends Node {
@@ -12,10 +11,6 @@ public class AntibanNode extends Node {
 	private final static ABCUtil antiban = RunTimeVariables.ANTIBAN;
 
 	private int runActivationFlag;
-
-	public AntibanNode() {
-		super(NodePriority.LAST);
-	}
 
 	@Override
 	public boolean condition() {
