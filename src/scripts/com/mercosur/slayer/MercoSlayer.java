@@ -16,8 +16,10 @@ import scripts.com.mercosur.dax_api.walker_engine.WalkingCondition;
 import scripts.com.mercosur.framework.NodeScript;
 import scripts.com.mercosur.slayer.data.Constants;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
+import scripts.com.mercosur.slayer.nodes.AntibanNode;
+import scripts.com.mercosur.slayer.nodes.EatingNode;
 import scripts.com.mercosur.slayer.nodes.FightingNode;
-import scripts.com.mercosur.slayer.nodes.banking.RequiredItemManager;
+import scripts.com.mercosur.slayer.nodes.RequiredItemManagerNode;
 import scripts.com.mercosur.slayer.nodes.taskretrieval.RetrieveTaskNode;
 
 import java.io.File;
@@ -30,9 +32,15 @@ public class MercoSlayer extends NodeScript implements Starting, PreEnding, Item
 
 	public static final String KEY_SECRET = "PUBLIC-KEY";
 
+	private final RequiredItemManagerNode requiredItemManagerNode;
+
 	public MercoSlayer() {
-		addNode(new FightingNode());
+		addNode(new EatingNode());
 		addNode(new RetrieveTaskNode());
+		addNode(requiredItemManagerNode = new RequiredItemManagerNode());
+		addNode(new FightingNode());
+		addNode(new AntibanNode());
+
 		try {
 			addGUI(new File(Util.getWorkingDirectory() + File.separator + "bin" + File.separator + "scripts" + File.separator + "com" + File.separator + "mercosur" + File.separator + "slayer" + File.separator + "gui" + File.separator + "main.fxml").toURI().toURL());
 		} catch (MalformedURLException e) {
@@ -87,13 +95,6 @@ public class MercoSlayer extends NodeScript implements Starting, PreEnding, Item
 
 	@Override
 	public void itemClicked(final RSItem rsItem) {
-		switch (rsItem.getType()) {
-			case INVENTORY:
-				RequiredItemManager.getInstance().revalidate();
-				break;
-			case EQUIPMENT:
-				//equipment updated
-				break;
-		}
+		requiredItemManagerNode.itemClicked(rsItem);
 	}
 }

@@ -1,10 +1,12 @@
-package scripts.com.mercosur.slayer.nodes.banking;
+package scripts.com.mercosur.slayer.nodes;
 
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.types.RSItem;
+import org.tribot.script.interfaces.ItemClicking;
+import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.slayer.data.Cache;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.items.AbstractItem;
@@ -12,6 +14,7 @@ import scripts.com.mercosur.slayer.models.items.Item;
 import scripts.com.mercosur.slayer.models.items.ItemProperty;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
 import scripts.com.mercosur.slayer.models.items.consumable.Potion;
+import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
 import scripts.com.mercosur.slayer.nodes.banking.request.BankRequest;
 
 import java.util.Arrays;
@@ -19,34 +22,40 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RequiredItemManager {
+public class RequiredItemManagerNode extends Node implements ItemClicking {
 
 	private final Food food;
 
 	private final Potion[] potions;
 
-	private static RequiredItemManager instance;
+	private static boolean revalidationRequired;
 
-	private RequiredItemManager() {
+	public RequiredItemManagerNode() {
 		food = RunTimeVariables.SCRIPT_SETTINGS.getFood();
 		potions = RunTimeVariables.SCRIPT_SETTINGS.getPotions();
 	}
 
-	public void revalidate() {
-		if (isLoggedIn()) {
-			if (!hasFood()) {
-				BankingNode.requestCriticalItemWithdraw(food, BankRequest.ALL);//When empty, overwrites passive food request
-			}
-			if (!hasPotions()) {
-				Stream.of(potions).filter(potion -> !hasItemInInventory(potion))
-						.forEach(potion -> BankingNode.requestCriticalItemWithdraw(potion, 1));
-			}
-			if (!hasRequiredSlayerAssignmentItems()) {
-				getAllVariationsOfRequiredItems().stream()
-						.filter(item -> !hasItem(item))
-						.forEach(item -> BankingNode.requestCriticalItemWithdraw(item, item.isStackable() ? 300 : 1));
-			}
+	@Override
+	public boolean condition() {
+		return revalidationRequired && isLoggedIn();
+	}
+
+	@Override
+	public Response execute() {
+		if (!hasFood()) {
+			BankingNode.requestCriticalItemWithdraw(food, BankRequest.ALL);//When empty, overwrites passive food request
 		}
+		if (!hasPotions()) {
+			Stream.of(potions).filter(potion -> !hasItemInInventory(potion))
+					.forEach(potion -> BankingNode.requestCriticalItemWithdraw(potion, 1));
+		}
+		if (!hasRequiredSlayerAssignmentItems()) {
+			getAllVariationsOfRequiredItems().stream()
+					.filter(item -> !hasItem(item))
+					.forEach(item -> BankingNode.requestCriticalItemWithdraw(item, item.isStackable() ? 300 : 1));
+		}
+		revalidationRequired = false;
+		return Response.CONTINUE;
 	}
 
 	private boolean isLoggedIn() {
@@ -99,8 +108,13 @@ public class RequiredItemManager {
 		return false;
 	}
 
-	public static RequiredItemManager getInstance() {
-		return instance == null ? instance = new RequiredItemManager() : instance;
+	@Override
+	public void itemClicked(final RSItem rsItem) {
+		switch (rsItem.getType()) {
+			case EQUIPMENT:
+			case INVENTORY:
+				revalidationRequired = true;
+				break;
+		}
 	}
-
 }

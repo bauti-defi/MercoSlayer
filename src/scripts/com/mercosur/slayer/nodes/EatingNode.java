@@ -7,7 +7,6 @@ import org.tribot.api2007.types.RSItem;
 import scripts.com.mercosur.framework.Node;
 import scripts.com.mercosur.slayer.data.RunTimeVariables;
 import scripts.com.mercosur.slayer.models.items.consumable.Food;
-import scripts.com.mercosur.slayer.nodes.banking.BankingNode;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 import java.util.stream.Stream;
@@ -22,15 +21,13 @@ public class EatingNode extends Node {
 	public boolean condition() {
 		if (hasFood()) {
 			return needsToEat();
-		} else {
-			BankingNode.requestCriticalItemWithdraw(food, 10);
 		}
 		return false;
 	}
 
 	@Override
 	public Node.Response execute() {
-		final RSItem food = Stream.of(Inventory.find(this.food.getName())).findAny().orElseThrow(() -> new NullPointerException("No FOOD found"));
+		final RSItem food = Stream.of(Inventory.find(this.food.getName())).findAny().orElseThrow(() -> new NullPointerException("No Food found"));
 		if (food != null) {
 			if (Sleep.conditionalSleep(new Condition() {
 				@Override
@@ -39,6 +36,7 @@ public class EatingNode extends Node {
 				}
 			}, 500, 2000)) {
 				generateNewEatAtHP();
+				return Response.LOOP;//in case we need to quickly eat again.
 			}
 		}
 		return Response.CONTINUE;

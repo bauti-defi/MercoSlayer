@@ -16,7 +16,6 @@ import scripts.com.mercosur.slayer.models.SlayerAssignment;
 import scripts.com.mercosur.slayer.models.Task;
 import scripts.com.mercosur.slayer.models.npcs.SlayerMaster;
 import scripts.com.mercosur.slayer.models.npcs.monster.Monster;
-import scripts.com.mercosur.slayer.nodes.banking.RequiredItemManager;
 import scripts.com.mercosur.slayer.util.Sleep;
 
 import java.util.List;
@@ -93,7 +92,6 @@ public class RetrieveTaskNode extends Node {
 
 						RunTimeVariables.currentSlayerAssignment = currentSlayerAssignment = new SlayerAssignment(getOptimalMonsterForTask(assignedTask), killsRequired);
 						needToAskSlayerMaster = false;
-						RequiredItemManager.getInstance().revalidate();
 
 						General.println("New task: " + currentSlayerAssignment.getAssignedAmount() + " " + currentSlayerAssignment.getMonster().getName());
 					}
